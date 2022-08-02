@@ -22,24 +22,35 @@ const useStyles = createStyles(theme => ({
   },
 }))
 
-interface UserCardImageProps {
+const StatDisplay = ({ stat }: { stat: Stat }) => {
+  return (
+    <>
+      {Object.entries(stat).map(([key, value]) => (
+        <div key={key}>
+          <Text align="center" size="lg" weight={500}>
+            {key}
+          </Text>
+          <Text align="center" size="sm" color="dimmed">
+            {value}
+          </Text>
+        </div>
+      ))}
+    </>
+  )
+}
+
+interface UserProps {
   user: User
 }
 
-export function UserCardImage({ user }: UserCardImageProps) {
+interface ProfileProps {
+  user: User
+  child: JSX.Element
+}
+
+const Profile = ({ user, child }: ProfileProps) => {
   const { id, stat, avatar, name, status } = user
   const { classes, theme } = useStyles()
-
-  const items = Object.entries(stat).map(([key, value]) => (
-    <div key={key}>
-      <Text align="center" size="lg" weight={500}>
-        {key}
-      </Text>
-      <Text align="center" size="sm" color="dimmed">
-        {value}
-      </Text>
-    </div>
-  ))
 
   return (
     <Card withBorder p="xl" radius="md" className={classes.card}>
@@ -67,12 +78,32 @@ export function UserCardImage({ user }: UserCardImageProps) {
         </Text>
       </Group>
       <Group mt="md" position="center" spacing={30}>
-        {items}
+        <StatDisplay stat={stat} />
       </Group>
-      <Group position="center">
-        <Button>Follow</Button>
-        <Button color={'red'}>Block</Button>
-      </Group>
+      {child}
     </Card>
   )
 }
+
+export function UserProfile({ user }: UserProps) {
+  return <Profile user={user} child={<p></p>} />
+}
+
+interface OtherUserProfileProps extends UserProps {
+  isBlocked: boolean
+}
+
+export function OtherUserProfile({ user, isBlocked }: OtherUserProfileProps) {
+  if (isBlocked) {
+    return (
+      <Overlay>
+        <Profile user={user} child={<Button>Unblock</Button>} />
+      </Overlay>
+    )
+  }
+  return null
+}
+//      <Group position="center">
+//        <Button>Follow</Button>
+//        <Button color={'red'}>Block</Button>
+//      </Group>

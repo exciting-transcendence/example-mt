@@ -1,7 +1,7 @@
 import { MantineProvider } from '@mantine/core'
 
 import { Group, Text } from '@mantine/core'
-import { UserCardImage } from './Profile'
+import { UserProfile } from './Profile'
 import { User } from './User.dto'
 
 const user: User = {
@@ -24,7 +24,7 @@ export function App() {
     <MantineProvider>
       <Text>Hello World!</Text>
       <Group position="center">
-        <UserCardImage user={user} />
+        <UserProfile user={user} />
       </Group>
     </MantineProvider>
   )
